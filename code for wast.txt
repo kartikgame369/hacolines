@@ -1,0 +1,39 @@
+.# Import necessary libraries
+##machine learning model that can accurately detect and classify different types of waste in
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+
+# Load and preprocess the training data
+#images, such as plastic, paper, metal, etc. The goal is to create a model that can improve
+X_train = ... # Load the training data as a numpy array
+y_train = ... # Load the corresponding labels as a numpy array
+
+# Build the model
+model = Sequential()
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(X_train.shape[1:])))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D((2, 2)))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(Flatten())
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(len(np.unique(y_train)), activation='softmax'))
+
+# Compile the model
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, y_train, epochs=10)
+
+# Evaluate the model on a test set
+X_test = ... # Load the test data as a numpy array
+y_test = ... # Load the corresponding labels as a numpy array
+test_loss, test_acc = model.evaluate(X_test, y_test, verbose=2)
+print('Test accuracy:', test_acc)
